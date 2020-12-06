@@ -1,34 +1,94 @@
 import React, { Component } from "react";
+import {
+  handlePasswordChange,
+  handleStatusChange,
+  deactivateUser,
+} from "./AxiosFunctions.js";
+
 import "bulma/css/bulma.css";
 
 import Modal from "./Modal";
 
 class Account extends Component {
-  state = { show: false, mode: "", status: "", password: "" };
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false,
+      mode: "",
+      status: "",
+      password: "",
+      oldPassword: "",
+      user: "dummy1",
+    };
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.changePassword = this.changePassword.bind(this);
+    this.changeOldPassword = this.changeOldPassword.bind(this);
+    this.changeStatus = this.changeStatus.bind(this);
+    this.handleClickForOptions = this.handleClickForOptions.bind(this);
+  }
 
   showModal = (modalMode) => {
     this.setState({ show: true, mode: modalMode });
-    console.log(this.state);
   };
 
   hideModal = () => {
     this.setState({ show: false });
-    console.log(this.state);
   };
 
   changePassword = (newPassword) => {
-    this.setState({ password: newPassword});
-    console.log('I changed the password!');
-  }
+    this.setState({ password: newPassword });
+  };
 
-  changeStatus = (newStatus)  => {
-    this.setState({ status: newStatus});
-    console.log('I changed the status');
-  }
+  changeOldPassword = (old) => {
+    this.setState({ oldPassword: old });
+  };
 
-  deactivateAccount = () => {
-    console.log('I deactivated this account');
-  }
+  changeStatus = (newStatus) => {
+    this.setState({ status: newStatus });
+  };
+
+  handleClickForOptions = () => {
+    if (this.state.mode === "status") {
+      let promise = handleStatusChange(this.state.user, this.state.status);
+
+      promise.then(
+        (result) => {
+          if (result.status === 200) {
+            this.setState({ show: false });
+          }
+        },
+        (err) => {
+          alert(err);
+        }
+      );
+    }
+
+    if (this.state.mode === "password") {
+      let promise = handlePasswordChange(
+        this.state.user,
+        this.state.oldPassword,
+        this.state.password
+      );
+
+      promise.then(
+        (result) => {
+          if (result.status === 200) {
+            this.setState({ show: false });
+          }
+        },
+        (err) => {
+          alert(err);
+        }
+      );
+    }
+
+    if (this.state.mode === "deactivate") {
+      if (deactivateUser(this.state.user) === 200) {
+        this.setState({ show: false });
+      }
+    }
+  };
 
   render() {
     return (
@@ -83,11 +143,12 @@ class Account extends Component {
 
               <Modal
                 show={this.state.show}
-                handleClose={this.hideModal}
                 mode={this.state.mode}
+                handleClose={this.hideModal}
+                handleSubmission={this.handleClickForOptions}
+                changeOldPassword={this.changeOldPassword}
                 changePassword={this.changePassword}
                 changeStatus={this.changeStatus}
-                deactivateAccount={this.deactivateAccount}
               />
 
               {/**

@@ -11,7 +11,7 @@ class StatusChange extends Component {
 
   handleChange(e) {
     this.setState({ value: e.target.value });
-    this.props.changeStatus(this.state.value);
+    this.props.changeStatus(e.target.value);
   }
 
   render() {

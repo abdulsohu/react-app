@@ -4,16 +4,23 @@ class PasswordChange extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "",
-      confirmValue: "",
+      value: '',
+      confirmValue: '',
+      oldValue: ''
     };
     this.handleOrignalChange = this.handleOrignalChange.bind(this);
     this.handleConfirmationChange = this.handleConfirmationChange.bind(this);
+    this.handleOldChange = this.handleOldChange.bind(this);
+  }
+
+  handleOldChange(e) {
+      this.setState({oldValue: e.target.value});
+      this.props.changeOldPassword(e.target.value);
   }
 
   handleOrignalChange(e) {
     this.setState({ value: e.target.value });
-    this.props.changePassword(this.state.value);
+    this.props.changePassword(e.target.value);
   }
 
   handleConfirmationChange(e) {
@@ -45,6 +52,8 @@ class PasswordChange extends Component {
               className="input"
               type="password"
               placeholder="Current Password"
+              value={this.state.oldValue}
+              onChange={this.handleOldChange}
             />
           </p>
           <p className="control">

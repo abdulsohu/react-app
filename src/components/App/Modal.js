@@ -2,12 +2,13 @@ import React from "react";
 import ChangeControl from "./ChangeControl.js";
 
 const Modal = ({
-  handleClose,
   show,
   mode,
+  handleClose,
+  handleSubmission,
+  changeOldPassword,
   changePassword,
   changeStatus,
-  deactivateAccount,
 }) => {
   const toDisplay = show ? "flex" : "none";
   const deactivateMessage = `We take your departure very seriously. Account deactivation locks
@@ -65,9 +66,9 @@ const Modal = ({
 
               <ChangeControl
                 form={ui}
+                changeOldPassword={changeOldPassword}
                 changePassword={changePassword}
                 changeStatus={changeStatus}
-                deactivateAccount={deactivateAccount}
               />
 
               <p>{message}</p>
@@ -75,7 +76,7 @@ const Modal = ({
             </div>
           </section>
           <footer className="modal-card-foot">
-            <button className={buttonClass}>{buttonMessage}</button>
+            <button className={buttonClass} onClick={handleSubmission}>{buttonMessage}</button>
             <button className="button" onClick={handleClose}>
               Cancel
             </button>

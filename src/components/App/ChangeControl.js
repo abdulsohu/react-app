@@ -7,7 +7,8 @@ class ChangeControl extends Component {
     if (this.props.form === "password") {
       return (
         <PasswordChange
-          changePassword={this.props.changePassword}
+        changeOldPassword={this.props.changeOldPassword}
+        changePassword={this.props.changePassword}
         />
       );
     }
